@@ -1,24 +1,33 @@
+#include <filesystem>
+#include <iomanip>
 #include <iostream>
 
+#include "config.h"
 #include "format.h"
 #include "scanner.h"
 
 namespace fs = std::filesystem;
 
 int main(int argc, char *argv[]) {
-  fs::path targetPath = (argc == 2) ? fs::path(argv[1]) : fs::current_path();
+  Config config = parse_arguments(argc, argv);
 
   std::error_code ec;
-  if (!fs::exists(targetPath, ec) || !fs::is_directory(targetPath, ec)) {
-    std::cerr << "Invalid directory: " << targetPath << "\n";
+  if (!fs::exists(config.targetPath, ec) ||
+      !fs::is_directory(config.targetPath, ec)) {
+    std::cerr << "Invalid directory: " << config.targetPath << "\n";
     return 1;
   }
 
-  auto report = scan_directory_breakdown(targetPath);
+  auto report = scan_directory_breakdown(config.targetPath);
+
+  std::size_t limit = (config.topN == 0 || config.topN > report.entries.size())
+                          ? report.entries.size()
+                          : config.topN;
 
   constexpr int sizeColumnWidth = 12;
 
-  for (const auto &entry : report.entries) {
+  for (std::size_t i = 0; i < limit; ++i) {
+    const auto &entry = report.entries[i];
     std::cout << std::setw(sizeColumnWidth) << format_size(entry.size) << "  "
               << entry.path.filename().string() << "\n";
   }
