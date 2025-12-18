@@ -1,0 +1,6 @@
+#pragma once
+
+#include <cstdint>
+#include <string>
+
+std::string format_size(std::uintmax_t bytes);
