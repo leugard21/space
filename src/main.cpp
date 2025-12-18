@@ -14,11 +14,17 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  auto breakdown = scan_directory_breakdown(targetPath);
+  auto report = scan_directory_breakdown(targetPath);
 
-  for (const auto &entry : breakdown) {
-    std::cout << format_size(entry.size) << "\t"
+  constexpr int sizeColumnWidth = 12;
+
+  for (const auto &entry : report.entries) {
+    std::cout << std::setw(sizeColumnWidth) << format_size(entry.size) << "  "
               << entry.path.filename().string() << "\n";
+  }
+
+  if (report.skipped > 0) {
+    std::cout << "\nSkipped entries due to errors: " << report.skipped << "\n";
   }
 
   return 0;

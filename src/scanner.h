@@ -9,6 +9,9 @@ struct EntrySize {
   std::uintmax_t size;
 };
 
-std::uintmax_t calculate_directory_size(const std::filesystem::path &path);
-std::vector<EntrySize>
-scan_directory_breakdown(const std::filesystem::path &path);
+struct ScanReport {
+  std::vector<EntrySize> entries;
+  std::size_t skipped;
+};
+
+ScanReport scan_directory_breakdown(const std::filesystem::path &path);
