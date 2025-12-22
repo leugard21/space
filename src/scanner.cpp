@@ -5,17 +5,23 @@
 namespace fs = std::filesystem;
 
 static std::uintmax_t safe_directory_size(const fs::path &path,
+                                          std::size_t maxDepth,
                                           std::size_t &skipped) {
   std::uintmax_t total = 0;
   std::error_code ec;
 
-  for (auto it = fs::recursive_directory_iterator(
-           path, fs::directory_options::skip_permission_denied, ec);
-       it != fs::recursive_directory_iterator(); ++it) {
+  fs::recursive_directory_iterator it(
+      path, fs::directory_options::skip_permission_denied, ec);
+
+  for (; it != fs::recursive_directory_iterator(); ++it) {
     if (ec) {
       ++skipped;
       ec.clear();
       continue;
+    }
+
+    if (maxDepth > 0 && it.depth() >= static_cast<int>(maxDepth)) {
+      it.disable_recursion_pending();
     }
 
     if (it->is_regular_file(ec)) {
@@ -30,9 +36,13 @@ static std::uintmax_t safe_directory_size(const fs::path &path,
   return total;
 }
 
-ScanReport scan_directory_breakdown(const fs::path &path) {
+ScanReport scan_directory_breakdown(const fs::path &path, std::size_t depth) {
   ScanReport report{};
   std::error_code ec;
+
+  if (depth == 0) {
+    return report;
+  }
 
   for (const auto &entry : fs::directory_iterator(path, ec)) {
     if (ec) {
@@ -45,7 +55,7 @@ ScanReport scan_directory_breakdown(const fs::path &path) {
     item.path = entry.path();
 
     if (entry.is_directory(ec)) {
-      item.size = safe_directory_size(entry.path(), report.skipped);
+      item.size = safe_directory_size(entry.path(), depth - 1, report.skipped);
     } else if (entry.is_regular_file(ec)) {
       item.size = entry.file_size(ec);
       if (ec) {

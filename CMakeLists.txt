@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 
 project(space
-    VERSION 0.5.0
+    VERSION 0.2.0
     DESCRIPTION "Disk Usage Visual Analyzer"
     LANGUAGES CXX
 )

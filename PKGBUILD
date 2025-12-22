@@ -1,5 +1,5 @@
 pkgname=space
-pkgver=0.1.0
+pkgver=0.2.0
 pkgrel=1
 pkgdesc="Disk Usage Visual Analyzer"
 arch=('x86_64')

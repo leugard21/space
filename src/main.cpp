@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  auto report = scan_directory_breakdown(config.targetPath);
+  auto report = scan_directory_breakdown(config.targetPath, config.depth);
 
   std::size_t limit = (config.topN == 0 || config.topN > report.entries.size())
                           ? report.entries.size()
