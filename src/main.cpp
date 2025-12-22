@@ -28,7 +28,10 @@ int main(int argc, char *argv[]) {
 
   for (std::size_t i = 0; i < limit; ++i) {
     const auto &entry = report.entries[i];
+
     std::cout << std::setw(sizeColumnWidth) << format_size(entry.size) << "  "
+              << std::fixed << std::setprecision(2) << std::setw(6)
+              << entry.percent << "%  " << format_bar(entry.percent) << "  "
               << entry.path.filename().string() << "\n";
   }
 

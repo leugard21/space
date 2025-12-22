@@ -23,3 +23,11 @@ std::string format_size(std::uintmax_t bytes) {
 
   return out.str();
 }
+
+std::string format_bar(double percent, std::size_t width) {
+  std::size_t filled = static_cast<std::size_t>((percent / 100.0) * width);
+  if (filled > width)
+    filled = width;
+
+  return std::string(filled, '#') + std::string(width - filled, '.');
+}

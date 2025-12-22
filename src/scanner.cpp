@@ -30,7 +30,7 @@ static std::uintmax_t safe_directory_size(const fs::path &path,
   return total;
 }
 
-ScanReport scan_directory_breakdown(const std::filesystem::path &path) {
+ScanReport scan_directory_breakdown(const fs::path &path) {
   ScanReport report{};
   std::error_code ec;
 
@@ -57,7 +57,15 @@ ScanReport scan_directory_breakdown(const std::filesystem::path &path) {
       continue;
     }
 
+    report.totalSize += item.size;
     report.entries.push_back(item);
+  }
+
+  for (auto &entry : report.entries) {
+    entry.percent = report.totalSize > 0
+                        ? (static_cast<double>(entry.size) * 100.0 /
+                           static_cast<double>(report.totalSize))
+                        : 0.0;
   }
 
   std::sort(report.entries.begin(), report.entries.end(),
