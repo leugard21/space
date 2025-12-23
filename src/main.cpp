@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <iostream>
 
+#include "cache.h"
 #include "config.h"
 #include "format.h"
 #include "json.h"
@@ -29,14 +30,15 @@ int main(int argc, char *argv[]) {
 
   if (config.tree) {
     auto root = scan_directory_breakdown(config.targetPath);
+    SizeCache cache;
 
-    std::vector<bool> rootStack;
+    std::vector<bool> stack;
     for (std::size_t i = 0; i < root.entries.size(); ++i) {
       bool isLast = (i + 1 == root.entries.size());
-      rootStack.clear();
-      rootStack.push_back(isLast);
-      print_tree(root.entries[i].path, rootStack, config.maxDepth,
-                 root.totalSize);
+      stack.clear();
+      stack.push_back(isLast);
+      print_tree(root.entries[i].path, stack, config.maxDepth, root.totalSize,
+                 config.minSizeBytes, cache);
     }
     return 0;
   }

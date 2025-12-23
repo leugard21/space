@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 
 project(space
-    VERSION 0.2.0
+    VERSION 1.1.0
     DESCRIPTION "Disk Usage Visual Analyzer"
     LANGUAGES CXX
 )
@@ -17,6 +17,7 @@ add_executable(space
     src/config.cpp
     src/json.cpp
     src/tree.cpp
+    src/cache.cpp
 )
 
 target_include_directories(space PRIVATE src)

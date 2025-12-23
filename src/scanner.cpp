@@ -5,8 +5,7 @@
 
 namespace fs = std::filesystem;
 
-static std::uintmax_t safe_directory_size(const fs::path &path,
-                                          std::size_t &skipped) {
+std::uintmax_t safe_directory_size(const fs::path &path, std::size_t &skipped) {
   std::uintmax_t total = 0;
   std::error_code ec;
 
