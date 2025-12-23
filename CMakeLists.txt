@@ -15,6 +15,7 @@ add_executable(space
     src/scanner.cpp
     src/format.cpp
     src/config.cpp
+    src/json.cpp
 )
 
 if (MSVC)

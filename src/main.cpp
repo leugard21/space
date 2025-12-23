@@ -1,9 +1,11 @@
+#include <algorithm>
 #include <filesystem>
 #include <iomanip>
 #include <iostream>
 
 #include "config.h"
 #include "format.h"
+#include "json.h"
 #include "scanner.h"
 
 namespace fs = std::filesystem;
@@ -19,6 +21,17 @@ int main(int argc, char *argv[]) {
   }
 
   auto report = scan_directory_breakdown(config.targetPath, config.depth);
+  if (config.json) {
+    std::cout << to_json(report) << "\n";
+    return 0;
+  }
+
+  report.entries.erase(std::remove_if(report.entries.begin(),
+                                      report.entries.end(),
+                                      [&](const EntrySize &e) {
+                                        return e.size < config.minSizeBytes;
+                                      }),
+                       report.entries.end());
 
   std::size_t limit = (config.topN == 0 || config.topN > report.entries.size())
                           ? report.entries.size()
