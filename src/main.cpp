@@ -7,6 +7,7 @@
 #include "format.h"
 #include "json.h"
 #include "scanner.h"
+#include "tree.h"
 
 namespace fs = std::filesystem;
 
@@ -20,9 +21,23 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  auto report = scan_directory_breakdown(config.targetPath, config.depth);
+  auto report = scan_directory_breakdown(config.targetPath);
   if (config.json) {
     std::cout << to_json(report) << "\n";
+    return 0;
+  }
+
+  if (config.tree) {
+    auto root = scan_directory_breakdown(config.targetPath);
+
+    std::vector<bool> rootStack;
+    for (std::size_t i = 0; i < root.entries.size(); ++i) {
+      bool isLast = (i + 1 == root.entries.size());
+      rootStack.clear();
+      rootStack.push_back(isLast);
+      print_tree(root.entries[i].path, rootStack, config.maxDepth,
+                 root.totalSize);
+    }
     return 0;
   }
 

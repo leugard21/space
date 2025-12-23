@@ -7,51 +7,40 @@ namespace fs = std::filesystem;
 static std::uintmax_t parse_size(const std::string &s) {
   if (s.empty())
     return 0;
-
-  char unit = s.back();
-  std::uintmax_t value = std::stoull(s);
-
-  switch (unit) {
-  case 'G':
-  case 'g':
-    return value * 1024ULL * 1024ULL * 1024ULL;
-  case 'M':
-  case 'm':
-    return value * 1024ULL * 1024ULL;
-  case 'K':
-  case 'k':
-    return value * 1024ULL;
-  case 'B':
-  case 'b':
-    return value;
-  default:
-    return value;
-  }
+  char u = s.back();
+  std::uintmax_t v = std::stoull(s);
+  if (u == 'G' || u == 'g')
+    return v * 1024ULL * 1024ULL * 1024ULL;
+  if (u == 'M' || u == 'm')
+    return v * 1024ULL * 1024ULL;
+  if (u == 'K' || u == 'k')
+    return v * 1024ULL;
+  return v;
 }
 
 Config parse_arguments(int argc, char *argv[]) {
-  Config config;
-  config.targetPath = fs::current_path();
-  config.topN = 0;
-  config.depth = 1;
-  config.minSizeBytes = 0;
-  config.json = false;
+  Config c{};
+  c.targetPath = fs::current_path();
+  c.topN = 0;
+  c.minSizeBytes = 0;
+  c.json = false;
+  c.tree = false;
+  c.maxDepth = static_cast<std::size_t>(-1);
 
   for (int i = 1; i < argc; ++i) {
-    std::string arg = argv[i];
-
-    if (arg == "--top" && i + 1 < argc) {
-      config.topN = static_cast<std::size_t>(std::stoul(argv[++i]));
-    } else if (arg == "--depth" && i + 1 < argc) {
-      config.depth = static_cast<std::size_t>(std::stoul(argv[++i]));
-    } else if (arg == "--min-size" && i + 1 < argc) {
-      config.minSizeBytes = parse_size(argv[++i]);
-    } else if (arg == "--json") {
-      config.json = true;
-    } else {
-      config.targetPath = fs::path(arg);
-    }
+    std::string a = argv[i];
+    if (a == "--top" && i + 1 < argc)
+      c.topN = std::stoull(argv[++i]);
+    else if (a == "--min-size" && i + 1 < argc)
+      c.minSizeBytes = parse_size(argv[++i]);
+    else if (a == "--json")
+      c.json = true;
+    else if (a == "--tree")
+      c.tree = true;
+    else if (a == "--max-depth" && i + 1 < argc)
+      c.maxDepth = std::stoull(argv[++i]);
+    else
+      c.targetPath = fs::path(a);
   }
-
-  return config;
+  return c;
 }

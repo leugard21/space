@@ -16,5 +16,4 @@ struct ScanReport {
   std::uintmax_t totalSize;
 };
 
-ScanReport scan_directory_breakdown(const std::filesystem::path &path,
-                                    std::size_t depth);
+ScanReport scan_directory_breakdown(const std::filesystem::path &path);

@@ -16,7 +16,10 @@ add_executable(space
     src/format.cpp
     src/config.cpp
     src/json.cpp
+    src/tree.cpp
 )
+
+target_include_directories(space PRIVATE src)
 
 if (MSVC)
     target_compile_options(space PRIVATE /W4)
@@ -31,12 +34,12 @@ install(TARGETS space
 )
 
 set(CPACK_PACKAGE_NAME "space")
-set(CPACK_PACKAGE_VENDOR "Luna")
+set(CPACK_PACKAGE_VENDOR "Space Project")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Disk Usage Visual Analyzer")
 set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
-set(CPACK_PACKAGE_CONTACT "islahulkafa01@gmail.com")
+set(CPACK_PACKAGE_CONTACT "maintainer@space.local")
 
-set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Luna")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Space Maintainer")
 set(CPACK_DEBIAN_PACKAGE_SECTION "utils")
 set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 
@@ -45,10 +48,10 @@ set(CPACK_RPM_PACKAGE_GROUP "Utilities")
 set(CPACK_RPM_PACKAGE_RELEASE 1)
 
 set(CPACK_GENERATOR
-    "DEB"
-    "RPM"
-    "TGZ"
-    "TXZ"
+    DEB
+    RPM
+    TGZ
+    TXZ
 )
 
 include(CPack)
