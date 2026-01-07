@@ -54,6 +54,20 @@ int main(int argc, char *argv[]) {
                                       }),
                        report.entries.end());
 
+  if (config.sortOrder == "size") {
+    std::sort(report.entries.begin(), report.entries.end(),
+              [](const EntrySize &a, const EntrySize &b) {
+                if (a.size != b.size)
+                  return a.size > b.size;
+                return a.path.filename() < b.path.filename();
+              });
+  } else if (config.sortOrder == "name") {
+    std::sort(report.entries.begin(), report.entries.end(),
+              [](const EntrySize &a, const EntrySize &b) {
+                return a.path.filename() < b.path.filename();
+              });
+  }
+
   std::size_t limit = (config.topN == 0 || config.topN > report.entries.size())
                           ? report.entries.size()
                           : config.topN;
@@ -66,7 +80,9 @@ int main(int argc, char *argv[]) {
     std::cout << std::setw(sizeColumnWidth) << format_size(entry.size) << "  "
               << std::fixed << std::setprecision(2) << std::setw(6)
               << entry.percent << "%  " << format_bar(entry.percent) << "  "
-              << entry.path.filename().string() << "\n";
+              << colorize_path(entry.path.filename().string(), entry.isDir,
+                               entry.size, config.color)
+              << "\n";
   }
 
   if (report.skipped > 0) {

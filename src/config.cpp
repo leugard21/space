@@ -27,6 +27,8 @@ Config parse_arguments(int argc, char *argv[]) {
   c.tree = false;
   c.maxDepth = static_cast<std::size_t>(-1);
   c.showVersion = false;
+  c.color = true;
+  c.sortOrder = "size";
 
   for (int i = 1; i < argc; ++i) {
     std::string a = argv[i];
@@ -42,6 +44,10 @@ Config parse_arguments(int argc, char *argv[]) {
       c.maxDepth = std::stoull(argv[++i]);
     else if (a == "--version")
       c.showVersion = true;
+    else if (a == "--no-color")
+      c.color = false;
+    else if (a == "--sort" && i + 1 < argc)
+      c.sortOrder = argv[++i];
     else
       c.targetPath = fs::path(a);
   }

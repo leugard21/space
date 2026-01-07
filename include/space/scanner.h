@@ -10,6 +10,7 @@ struct EntrySize {
   std::filesystem::path path;
   std::uintmax_t size;
   double percent;
+  bool isDir;
 };
 
 struct ScanReport {

@@ -31,3 +31,30 @@ std::string format_bar(double percent, std::size_t width) {
 
   return std::string(filled, '#') + std::string(width - filled, '.');
 }
+
+std::string colorize_path(const std::string &path, bool isDir,
+                          std::uintmax_t size, bool enabled) {
+  if (!enabled)
+    return path;
+
+  // Colors
+  const char *RESET = "\033[0m";
+  const char *BLUE = "\033[1;34m";   // Bold Blue for directories
+  const char *RED = "\033[1;31m";    // Bold Red for > 1GB
+  const char *YELLOW = "\033[1;33m"; // Bold Yellow for > 100MB
+  const char *GREEN = "\033[1;32m";  // Bold Green for others
+
+  std::string color = GREEN;
+
+  if (isDir) {
+    color = BLUE;
+  } else {
+    if (size > 1024ULL * 1024ULL * 1024ULL) {
+      color = RED;
+    } else if (size > 100ULL * 1024ULL * 1024ULL) {
+      color = YELLOW;
+    }
+  }
+
+  return std::string(color) + path + RESET;
+}

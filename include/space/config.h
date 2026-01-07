@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <filesystem>
+#include <string>
 
 struct Config {
   std::filesystem::path targetPath;
@@ -12,6 +13,8 @@ struct Config {
   bool tree;
   std::size_t maxDepth;
   bool showVersion;
+  bool color;
+  std::string sortOrder;
 };
 
 Config parse_arguments(int argc, char *argv[]);

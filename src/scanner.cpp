@@ -44,8 +44,9 @@ ScanReport scan_directory_breakdown(const fs::path &path) {
 
     EntrySize item;
     item.path = entry.path();
+    item.isDir = entry.is_directory(ec);
 
-    if (entry.is_directory(ec)) {
+    if (item.isDir) {
       item.size = safe_directory_size(entry.path(), report.skipped);
     } else if (entry.is_regular_file(ec)) {
       item.size = entry.file_size(ec);
@@ -68,14 +69,5 @@ ScanReport scan_directory_breakdown(const fs::path &path) {
                            static_cast<double>(report.totalSize))
                         : 0.0;
   }
-
-  std::sort(report.entries.begin(), report.entries.end(),
-            [](const EntrySize &a, const EntrySize &b) {
-              if (a.size != b.size) {
-                return a.size > b.size;
-              }
-              return a.path.filename() < b.path.filename();
-            });
-
   return report;
 }

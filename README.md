@@ -8,6 +8,8 @@
 
 - **Visual Breakdown**: See disk usage with ASCII bars and percentage.
 - **Tree View**: Explore directory structure with depth control.
+- **Colorized Output**: Highlighting directories and large files for better visibility.
+- **Sorting**: Support for sorting entries by size or name.
 - **Filtering**: Filter by minimum size or top N entries.
 - **JSON Output**: Export data for further processing.
 - **Fast**: Built with modern C++ and `std::filesystem`.
@@ -44,6 +46,8 @@ space [path] [options]
 - `--min-size <size>`: Filter entries smaller than `<size>` (e.g., `100M`, `1G`).
 - `--tree`: Display a tree view of the directory structure.
 - `--max-depth N`: Limit traversal depth.
+- `--sort <type>`: Sort entries by `size` or `name` (default: `size`).
+- `--no-color`: Disable colorized output.
 - `--json`: Output result in JSON format.
 - `--version`: Show version information.
 - `--help`: Show help (WIP).
