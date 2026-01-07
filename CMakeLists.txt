@@ -20,7 +20,8 @@ add_executable(space
     src/cache.cpp
 )
 
-target_include_directories(space PRIVATE src)
+target_include_directories(space PRIVATE include)
+target_compile_definitions(space PRIVATE SPACE_VERSION="${PROJECT_VERSION}")
 
 if (MSVC)
     target_compile_options(space PRIVATE /W4)
@@ -33,6 +34,9 @@ include(GNUInstallDirs)
 install(TARGETS space
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+install(FILES LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/space)
+install(FILES README.md DESTINATION ${CMAKE_INSTALL_DOCDIR})
 
 set(CPACK_PACKAGE_NAME "space")
 set(CPACK_PACKAGE_VENDOR "Space Project")

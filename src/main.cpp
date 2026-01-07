@@ -3,17 +3,21 @@
 #include <iomanip>
 #include <iostream>
 
-#include "cache.h"
-#include "config.h"
-#include "format.h"
-#include "json.h"
-#include "scanner.h"
-#include "tree.h"
+#include "space/cache.h"
+#include "space/config.h"
+#include "space/format.h"
+#include "space/json.h"
+#include "space/scanner.h"
+#include "space/tree.h"
 
 namespace fs = std::filesystem;
 
 int main(int argc, char *argv[]) {
   Config config = parse_arguments(argc, argv);
+  if (config.showVersion) {
+    std::cout << "space version " << SPACE_VERSION << "\n";
+    return 0;
+  }
 
   std::error_code ec;
   if (!fs::exists(config.targetPath, ec) ||

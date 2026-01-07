@@ -1,4 +1,4 @@
-#include "config.h"
+#include "space/config.h"
 
 #include <string>
 
@@ -26,6 +26,7 @@ Config parse_arguments(int argc, char *argv[]) {
   c.json = false;
   c.tree = false;
   c.maxDepth = static_cast<std::size_t>(-1);
+  c.showVersion = false;
 
   for (int i = 1; i < argc; ++i) {
     std::string a = argv[i];
@@ -39,6 +40,8 @@ Config parse_arguments(int argc, char *argv[]) {
       c.tree = true;
     else if (a == "--max-depth" && i + 1 < argc)
       c.maxDepth = std::stoull(argv[++i]);
+    else if (a == "--version")
+      c.showVersion = true;
     else
       c.targetPath = fs::path(a);
   }

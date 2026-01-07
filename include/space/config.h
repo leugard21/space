@@ -11,6 +11,7 @@ struct Config {
   bool json;
   bool tree;
   std::size_t maxDepth;
+  bool showVersion;
 };
 
 Config parse_arguments(int argc, char *argv[]);
